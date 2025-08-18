@@ -1,7 +1,6 @@
-<script setup>
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+<script lang="ts">
+import { getRandomInt, shuffleInPlace } from '../utils';
+
 const horses = [
   'Fast & Flurrious',
   'Giddyup Giggles',
@@ -64,13 +63,7 @@ const colors = [
   'mediumspringgreen',
 ];
 
-// Shuffle colors
-for (let i = 0; i < colors.length; i++) {
-  const randomIndex = getRandomInt(colors.length);
-  const tmp = colors[i];
-  colors[i] = colors[randomIndex];
-  colors[randomIndex] = tmp;
-}
+shuffleInPlace(colors);
 
 // TODO: do not use same names more than once
 const horseList = Array.from({ length: 20 }).map((_, i) => ({
@@ -78,11 +71,24 @@ const horseList = Array.from({ length: 20 }).map((_, i) => ({
   condition: Math.floor(Math.random() * 100 + 1),
   color: colors[i],
 }));
+
+// TODO: Types doesn't work for the store
+// https://vuejs.org/guide/typescript/overview.html#using-vue-with-typescript doesn't work
+export default {
+  data() {
+    return { horseList };
+  },
+  methods: {
+    createSchedule() {
+      this.$store.dispatch('createSchedule', { pool: horseList });
+    },
+  },
+};
 </script>
 
 <template>
   <table>
-    <caption>
+    <caption v-on:click="createSchedule">
       Horse List
     </caption>
     <thead>

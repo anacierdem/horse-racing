@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import HorseList from './components/HorseList.vue';
+import HorseList from '@/components/HorseList.vue';
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <HorseList />
-    </div>
-  </header>
+  <header></header>
 
   <main>
-    <TheWelcome />
+    <div>
+      <HorseList />
+    </div>
   </main>
 </template>
 

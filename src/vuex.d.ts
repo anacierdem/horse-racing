@@ -1,6 +1,7 @@
-declare module "vuex" {
-  export * from "vuex/types/index.d.ts";
-  export * from "vuex/types/helpers.d.ts";
-  export * from "vuex/types/logger.d.ts";
-  export * from "vuex/types/vue.d.ts";
+// This is a hack to make vuex types work
+declare module 'vuex' {
+  export * from 'vuex/types/index.d.ts';
+  export * from 'vuex/types/helpers.d.ts';
+  export * from 'vuex/types/logger.d.ts';
+  export * from 'vuex/types/vue.d.ts';
 }
