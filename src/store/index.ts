@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import type { Horse, Round } from './types';
+import type { Horse, Race, Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
 
@@ -16,18 +16,17 @@ export const store = createStore<{
   horses: Horse[];
   raceSchedule: Round[];
   raceResults: Round[];
-  currentRace: {
-    round: number;
-    horses: Horse[];
-    simulated: boolean;
-  };
+  currentRace: Race;
 }>({
   state() {
     return {
       horses: horseList,
       currentRace: {
-        round: 0,
-        horses: [],
+        no: 0,
+        round: {
+          horses: [],
+          length: 0,
+        },
         simulated: false,
       },
       raceSchedule: [],
@@ -46,7 +45,7 @@ export const store = createStore<{
     },
 
     simulateRace(state) {
-      const currentRound = state.raceSchedule[state.currentRace.round];
+      const currentRound = state.raceSchedule[state.currentRace.no];
       // No race left
       if (!currentRound) {
         return;
@@ -58,12 +57,12 @@ export const store = createStore<{
 
       const cost = Math.round(currentRound.length / CONDITION_PER_TRACK_LENGTH);
 
-      state.currentRace.horses = [];
+      state.currentRace.round.horses = [];
       for (let horse of currentRound.horses) {
         const horseCopy = { ...horse };
         horseCopy.condition -= cost;
         horseCopy.condition = Math.max(horseCopy.condition, 0);
-        state.currentRace.horses.push(horseCopy);
+        state.currentRace.round.horses.push(horseCopy);
       }
 
       state.currentRace.simulated = true;
@@ -74,20 +73,22 @@ export const store = createStore<{
         return;
       }
 
-      const currentRound = state.raceSchedule[state.currentRace.round];
-      for (let i = 0; i < state.currentRace.horses.length; i++) {
-        currentRound.horses[i].condition = state.currentRace.horses[i].condition;
+      const currentRound = state.raceSchedule[state.currentRace.no];
+      for (let i = 0; i < state.currentRace.round.horses.length; i++) {
+        currentRound.horses[i].condition =
+          state.currentRace.round.horses[i].condition;
       }
 
       state.raceResults.push({
         horses: [...currentRound.horses].sort(
-          (a, b) => b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
+          (a, b) =>
+            b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
         ),
         // This won't be used, but it is here to make it compatible for the underlying component
         // TODO: find a better alternative
         length: currentRound.length,
       });
-      state.currentRace.round++;
+      state.currentRace.no++;
       state.currentRace.simulated = false;
 
       // Replenish condition

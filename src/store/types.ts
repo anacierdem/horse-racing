@@ -10,3 +10,9 @@ export type Round = {
   horses: Horse[];
   length: number;
 };
+
+export type Race = {
+  no: number;
+  round: Round;
+  simulated: boolean;
+};

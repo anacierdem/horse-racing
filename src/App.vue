@@ -2,6 +2,7 @@
 import HorseList from '@/components/HorseList.vue';
 import RaceDisplay from '@/components/RaceDisplay.vue';
 import type { Round } from './store/types';
+import CurrentRace from './components/CurrentRace.vue';
 
 export default {
   methods: {
@@ -28,6 +29,7 @@ export default {
   components: {
     HorseList,
     RaceDisplay,
+    CurrentRace,
   },
 };
 </script>
@@ -41,6 +43,8 @@ export default {
     <button v-on:click="commit">Commit</button>
     <div class="main-wrapper">
       <HorseList />
+      <CurrentRace />
+      <!-- TODO: these look very ugly when empty -->
       <RaceDisplay header="Schedule" :races="raceSchedule" />
       <RaceDisplay header="Results" :races="raceResults" />
     </div>

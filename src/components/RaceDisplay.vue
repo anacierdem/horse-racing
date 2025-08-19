@@ -1,6 +1,7 @@
 <script lang="ts">
 export default {
   props: {
+    // TODO: fix this type
     races: Array,
     header: String,
   },
