@@ -3,10 +3,19 @@ import type { Horse, Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
 
+// Bigger the value, bigger for surprises
+const LUCK_FACTOR = 20;
+
+// After each race, this much condition is replenished
+const REPLENISH_CONDITION_PER_ROUND = 5;
+
+// Everytime a horse runs this amount, it'll loose 1 condition
+const CONDITION_PER_TRACK_LENGTH = 100;
+
 export const store = createStore<{
   horses: Horse[];
   raceSchedule: Round[];
-  raceResults: string[][];
+  raceResults: Round[];
   currentRace: {
     round: number;
     horses: Horse[];
@@ -27,15 +36,6 @@ export const store = createStore<{
   },
 
   mutations: {
-    resetSchedule(state) {
-      state.currentRace = {
-        horses: [],
-        round: 0,
-        simulated: false,
-      };
-      state.raceSchedule = [];
-    },
-
     appendRound(state, payload: { length: number }) {
       const shuffledPool = [...state.horses];
       shuffleInPlace(shuffledPool);
@@ -56,7 +56,7 @@ export const store = createStore<{
         return;
       }
 
-      const cost = getRandomInt(10) + Math.round(currentRound.length / 300);
+      const cost = Math.round(currentRound.length / CONDITION_PER_TRACK_LENGTH);
 
       state.currentRace.horses = [];
       for (let horse of currentRound.horses) {
@@ -79,19 +79,30 @@ export const store = createStore<{
         currentRound.horses[i].condition = state.currentRace.horses[i].condition;
       }
 
-      state.raceResults.push(
-        [...currentRound.horses]
-          .sort((a, b) => a.condition - b.condition + getRandomInt(50) - 50)
-          .map(({ name }) => name),
-      );
+      state.raceResults.push({
+        horses: [...currentRound.horses].sort(
+          (a, b) => b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
+        ),
+        // This won't be used, but it is here to make it compatible for the underlying component
+        // TODO: find a better alternative
+        length: currentRound.length,
+      });
       state.currentRace.round++;
       state.currentRace.simulated = false;
+
+      // Replenish condition
+      for (let i = 0; i < state.horses.length; i++) {
+        state.horses[i].condition += REPLENISH_CONDITION_PER_ROUND;
+        state.horses[i].condition = Math.min(state.horses[i].condition, 100);
+      }
     },
   },
 
   actions: {
     createSchedule(context) {
-      context.commit('resetSchedule');
+      if (context.state.raceSchedule.length > 0) {
+        return;
+      }
       for (let i = 0; i < 6; i++) {
         // TODO: This doesn't look like it is properly typed
         context.commit('appendRound', {
