@@ -28,10 +28,11 @@ export default defineComponent({
   },
   methods: {
     startAnimation() {
+      this.currentTick++;
       // TODO: Fix typing properties on `this`
       this.interval = setInterval(() => {
         this.currentTick++;
-        if (this.currentTick == 10) {
+        if (this.currentTick == 11) {
           this.stopAnimation();
           this.currentTick = 0;
           this.$store.commit('endRace');
@@ -78,9 +79,11 @@ export default defineComponent({
         <div class="lane-marker">
           {{ index + 1 }}
         </div>
+        {{ outcomes[index] }}
         <div
           class="horse"
-          :style="`transform: translate(-${100 - currentTick * 10}%, 0) scaleX(-1)`"
+          :class="currentTick == 0 ? '' : 'animate'"
+          :style="`transform: translate(-${100 - ((9 - (outcomes[index] ?? 0) + 1) / 10) * currentTick * 10}%, 0) scaleX(-1)`"
         >
           <!-- TODO: this glyph will look different based on the font, fix -->
           🐎
@@ -115,7 +118,9 @@ export default defineComponent({
       line-height: 35px;
       align-self: center;
       width: 100%;
-      transition: transform 0.5s;
+      &.animate {
+        transition: transform 0.5s;
+      }
     }
   }
 
