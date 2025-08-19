@@ -68,8 +68,6 @@ export const store = createStore<{
           (a, b) =>
             b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
         );
-
-      state.raceNo++;
     },
 
     endRace(state) {
