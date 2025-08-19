@@ -14,9 +14,6 @@ export default {
     simulate() {
       this.$store.commit('simulateRace');
     },
-    commit() {
-      this.$store.commit('commitRace');
-    },
   },
   computed: {
     raceSchedule(): Round[] {
@@ -39,8 +36,7 @@ export default {
 
   <main>
     <button v-on:click="createSchedule">Generate schedule</button>
-    <button v-on:click="simulate">Simulate</button>
-    <button v-on:click="commit">Commit</button>
+    <button v-on:click="simulate">Start race</button>
     <div class="main-wrapper">
       <HorseList />
       <CurrentRace />

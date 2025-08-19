@@ -11,8 +11,8 @@ export type Round = {
   length: number;
 };
 
-export type Race = {
-  no: number;
-  round: Round;
-  simulated: boolean;
+// An array representing horses from 1st to last
+export type RaceOutcome = {
+  index: number;
+  condition: number;
 };

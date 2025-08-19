@@ -1,34 +1,87 @@
 <script lang="ts">
-import type { Race } from '@/store/types';
+import type { RaceOutcome, Round } from '@/store/types';
+import { defineComponent } from 'vue';
 
 // TODO: Types doesn't work for the store
 // https://vuejs.org/guide/typescript/overview.html#using-vue-with-typescript doesn't work
-export default {
+export default defineComponent({
   computed: {
-    currentRace() {
-      return this.$store.state.currentRace as Race;
+    currentRound(): Round {
+      return this.$store.getters.currentRound;
+    },
+    outcomes(): Record<number, number> {
+      const positionLookup: Record<number, number> = {};
+      const outcomes: RaceOutcome[] = this.$store.state.outcomes;
+      for (let i = 0; i < outcomes.length; i++) {
+        positionLookup[outcomes[i].index] = i;
+      }
+      return positionLookup;
+    },
+    raceNo(): number {
+      return this.$store.state.raceNo;
     },
   },
-  data() {
+  data(): { currentTick: number } {
     return {
-      currentTime: 0,
+      currentTick: 0,
     };
   },
-};
+  methods: {
+    startAnimation() {
+      // TODO: Fix typing properties on `this`
+      this.interval = setInterval(() => {
+        this.currentTick++;
+        if (this.currentTick == 10) {
+          this.stopAnimation();
+          this.currentTick = 0;
+          this.$store.commit('endRace');
+        }
+      }, 500);
+    },
+    stopAnimation() {
+      clearInterval(this.interval);
+      this.interval = undefined;
+    },
+  },
+  beforeUpdate() {
+    if (Object.keys(this.outcomes).length > 0 && !this.interval) {
+      this.startAnimation();
+    }
+    console.log(this.currentTick);
+  },
+  unmounted() {
+    this.stopAnimation();
+  },
+});
 </script>
 
 <template>
   <div class="container">
-    <div>
+    {{ currentTick }}
+    <div v-if="!currentRound">WAITING FOR SCHEDULE</div>
+    <div v-if="currentRound">
       <!-- TODO: use nth notation -->
-      LAP {{ currentRace.no + 1 }}:
+      LAP {{ raceNo + 1 }}:
     </div>
     <div class="lane-wrapper">
-      <div v-for="(horse, index) in currentRace.round.horses" class="lane">
+      <div v-if="!currentRound" v-for="index in 10" class="lane">
+        <div class="lane-marker">
+          {{ index }}
+        </div>
+      </div>
+
+      <div
+        v-if="currentRound"
+        v-for="(_, index) in currentRound.horses"
+        class="lane"
+      >
         <div class="lane-marker">
           {{ index + 1 }}
         </div>
-        <div class="horse" :style="`transform: translate(-100%, 0) scaleX(-1)`">
+        <div
+          class="horse"
+          :style="`transform: translate(-${100 - currentTick * 10}%, 0) scaleX(-1)`"
+        >
           <!-- TODO: this glyph will look different based on the font, fix -->
           🐎
         </div>
@@ -62,6 +115,7 @@ export default {
       line-height: 35px;
       align-self: center;
       width: 100%;
+      transition: transform 0.5s;
     }
   }
 

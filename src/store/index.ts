@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import type { Horse, Race, Round } from './types';
+import type { Horse, RaceOutcome, Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
 
@@ -16,22 +16,23 @@ export const store = createStore<{
   horses: Horse[];
   raceSchedule: Round[];
   raceResults: Round[];
-  currentRace: Race;
+  raceNo: 0;
+  outcomes: RaceOutcome[];
 }>({
   state() {
     return {
       horses: horseList,
-      currentRace: {
-        no: 0,
-        round: {
-          horses: [],
-          length: 0,
-        },
-        simulated: false,
-      },
       raceSchedule: [],
       raceResults: [],
+      raceNo: 0,
+      outcomes: [],
     };
+  },
+
+  getters: {
+    currentRound(state) {
+      return state.raceSchedule[state.raceNo];
+    },
   },
 
   mutations: {
@@ -45,51 +46,57 @@ export const store = createStore<{
     },
 
     simulateRace(state) {
-      const currentRound = state.raceSchedule[state.currentRace.no];
+      const currentRound = state.raceSchedule[state.raceNo];
       // No race left
       if (!currentRound) {
         return;
       }
 
-      if (state.currentRace.simulated) {
+      if (state.outcomes.length > 0) {
         return;
       }
 
       const cost = Math.round(currentRound.length / CONDITION_PER_TRACK_LENGTH);
 
-      state.currentRace.round.horses = [];
-      for (let horse of currentRound.horses) {
-        const horseCopy = { ...horse };
-        horseCopy.condition -= cost;
-        horseCopy.condition = Math.max(horseCopy.condition, 0);
-        state.currentRace.round.horses.push(horseCopy);
-      }
+      // Figure out positions and final conditions
+      state.outcomes = currentRound.horses
+        .map(({ condition }, index) => ({
+          condition: Math.max(condition - cost, 0),
+          index,
+        }))
+        .sort(
+          (a, b) =>
+            b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
+        );
 
-      state.currentRace.simulated = true;
+      state.raceNo++;
     },
 
-    commitRace(state) {
-      if (!state.currentRace.simulated) {
+    endRace(state) {
+      if (state.outcomes.length == 0) {
         return;
       }
 
-      const currentRound = state.raceSchedule[state.currentRace.no];
-      for (let i = 0; i < state.currentRace.round.horses.length; i++) {
-        currentRound.horses[i].condition =
-          state.currentRace.round.horses[i].condition;
-      }
-
-      state.raceResults.push({
-        horses: [...currentRound.horses].sort(
-          (a, b) =>
-            b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
-        ),
+      const currentRaceResult: Round = {
+        horses: [],
         // This won't be used, but it is here to make it compatible for the underlying component
         // TODO: find a better alternative
-        length: currentRound.length,
-      });
-      state.currentRace.no++;
-      state.currentRace.simulated = false;
+        length: 0,
+      };
+      const currentRound = state.raceSchedule[state.raceNo];
+      for (let i = 0; i < state.outcomes.length; i++) {
+        const currentPositionHorseIndex = state.outcomes[i].index;
+        // Reflect back end race condition to actual horses
+        currentRound.horses[currentPositionHorseIndex].condition =
+          state.outcomes[i].condition;
+        currentRaceResult.horses.push(
+          currentRound.horses[currentPositionHorseIndex],
+        );
+      }
+
+      state.raceResults.push(currentRaceResult);
+      state.raceNo++;
+      state.outcomes = [];
 
       // Replenish condition
       for (let i = 0; i < state.horses.length; i++) {
