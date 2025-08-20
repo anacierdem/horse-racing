@@ -47,7 +47,7 @@ export default defineComponent({
       return this.$store.getters.isFinished;
     },
     haveRace() {
-      return Object.keys(this.outcomes).length > 0;
+      return this.$store.getters.haveRace;
     },
   },
   methods: {

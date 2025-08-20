@@ -35,6 +35,9 @@ export const store = createStore<State>({
     isScheduled(state) {
       return state.raceSchedule.length > 0;
     },
+    haveRace(state) {
+      return Object.keys(state.outcomes).length > 0;
+    },
   },
 
   mutations: {

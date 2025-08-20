@@ -25,6 +25,9 @@ export default {
     isScheduled() {
       return this.$store.getters.isScheduled;
     },
+    haveRace() {
+      return this.$store.getters.haveRace;
+    },
   },
   components: {
     HorseList,
@@ -41,7 +44,9 @@ export default {
     <button v-on:click="createSchedule" :disabled="isScheduled">
       Generate
     </button>
-    <button v-on:click="simulate" :disabled="isFinished">Start</button>
+    <button v-on:click="simulate" :disabled="isFinished || haveRace">
+      Start
+    </button>
     <div class="main-wrapper">
       <HorseList />
       <CurrentRace />
