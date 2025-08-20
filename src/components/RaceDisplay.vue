@@ -1,7 +1,7 @@
 <script lang="ts">
+import type { Round } from '@/store/types';
 export default {
   props: {
-    // TODO: fix this type
     races: Array,
     header: String,
   },
@@ -22,7 +22,7 @@ export default {
       </tr>
     </thead>
     <tbody>
-      <template v-for="(race, index) in races">
+      <template v-for="(race, index) in races as Round[]">
         <!-- TODO: convert this to nth format -->
         <tr>
           <th colspan="2">LAP {{ index + 1 }}</th>

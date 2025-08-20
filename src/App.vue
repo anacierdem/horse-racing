@@ -14,16 +14,16 @@ export default {
     },
   },
   computed: {
-    raceSchedule(): Round[] {
-      return this.$store.state.raceSchedule as Round[];
+    raceSchedule() {
+      return this.$store.state.raceSchedule;
     },
-    raceResults(): Round[] {
-      return this.$store.state.raceResults as Round[];
+    raceResults() {
+      return this.$store.state.raceResults;
     },
-    isFinished(): boolean {
+    isFinished() {
       return this.$store.getters.isFinished;
     },
-    isScheduled(): boolean {
+    isScheduled() {
       return this.$store.getters.isScheduled;
     },
   },
