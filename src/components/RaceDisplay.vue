@@ -2,7 +2,7 @@
 import type { Round } from '@/store/types';
 export default {
   props: {
-    races: Array,
+    races: Array as typeof Array<Round>,
     header: String,
   },
 };
@@ -22,7 +22,7 @@ export default {
       </tr>
     </thead>
     <tbody>
-      <template v-for="(race, index) in races as Round[]">
+      <template v-for="(race, index) in races">
         <!-- TODO: convert this to nth format -->
         <!-- These won't change order, so key is irrelevant -->
         <!-- eslint-disable-next-line vue/require-v-for-key -->
