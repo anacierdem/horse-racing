@@ -48,14 +48,15 @@ export const store = createStore<State>({
     },
 
     simulateRace(state) {
+      // Already running
+      if (state.outcomes.length > 0) {
+        return;
+      }
+
       state.raceNo++;
       const currentRound: Round = state.raceSchedule[state.raceNo];
       // No race left
       if (!currentRound) {
-        return;
-      }
-
-      if (state.outcomes.length > 0) {
         return;
       }
 
