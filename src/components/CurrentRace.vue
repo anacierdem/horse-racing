@@ -112,17 +112,7 @@ export default defineComponent({
       LAP {{ raceNo + 1 }}:
     </div>
     <div class="lane-wrapper">
-      <div v-if="!currentRound" v-for="index in HORSE_PER_RACE" class="lane">
-        <div class="lane-marker">
-          {{ index }}
-        </div>
-      </div>
-
-      <div
-        v-if="currentRound"
-        v-for="(_, index) in currentRound.horses"
-        class="lane"
-      >
+      <div v-for="(_, index) in this.horsePositions" class="lane">
         <div class="lane-marker">
           {{ index + 1 }}
         </div>
