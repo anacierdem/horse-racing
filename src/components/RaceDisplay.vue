@@ -40,6 +40,7 @@ export default {
 <style scoped>
 table {
   border-collapse: collapse;
+  min-width: 300px;
 }
 
 table,

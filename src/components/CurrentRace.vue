@@ -7,7 +7,7 @@ const INTERVAL = 500;
 
 // Scatter the amount run each tick. Higher number results in more drama, but
 // too high and things will break and look ugly :)
-const RANDOMNESS = 0.5;
+const RANDOMNESS = 2;
 
 // For this many initial ticks, horse behave randomly
 const EXTRA_TICKS = 20;
@@ -106,10 +106,10 @@ export default defineComponent({
 <!-- TODO: Add finish line animation for a clearer understanding -->
 <template>
   <div class="container">
-    <div v-if="raceNo == 0">WAITING FOR RACE</div>
-    <div v-if="raceNo > 0">
+    <div v-if="Object.keys(outcomes).length == 0">WAITING FOR RACE</div>
+    <div v-if="Object.keys(outcomes).length > 0">
       <!-- TODO: use nth notation -->
-      LAP {{ raceNo }}:
+      LAP {{ raceNo + 1 }}:
     </div>
     <div class="lane-wrapper">
       <div v-if="!currentRound" v-for="index in HORSE_PER_RACE" class="lane">
@@ -147,6 +147,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-width: 500px;
 }
 
 .lane-wrapper {

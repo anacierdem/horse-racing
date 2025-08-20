@@ -17,7 +17,7 @@ export const store = createStore<{
   horses: Horse[];
   raceSchedule: Round[];
   raceResults: Round[];
-  raceNo: 0;
+  raceNo: number;
   outcomes: RaceOutcome[];
 }>({
   state() {
@@ -69,8 +69,6 @@ export const store = createStore<{
           (a, b) =>
             b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
         );
-
-      if (state.raceNo < TOTAL_ROUNDS - 1) state.raceNo++;
     },
 
     endRace(state) {
@@ -104,6 +102,8 @@ export const store = createStore<{
         state.horses[i].condition += REPLENISH_CONDITION_PER_ROUND;
         state.horses[i].condition = Math.min(state.horses[i].condition, 100);
       }
+
+      state.raceNo++;
     },
   },
 
