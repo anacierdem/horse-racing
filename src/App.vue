@@ -6,8 +6,6 @@ import CurrentRace from './components/CurrentRace.vue';
 
 export default {
   methods: {
-    // TODO: Types doesn't work for the store
-    // https://vuejs.org/guide/typescript/overview.html#using-vue-with-typescript doesn't work
     createSchedule() {
       this.$store.dispatch('createSchedule');
     },
@@ -48,7 +46,6 @@ export default {
     <div class="main-wrapper">
       <HorseList />
       <CurrentRace />
-      <!-- TODO: these look very ugly when empty -->
       <RaceDisplay header="Schedule" :races="raceSchedule" />
       <RaceDisplay header="Results" :races="raceResults" />
     </div>

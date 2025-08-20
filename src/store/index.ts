@@ -1,8 +1,9 @@
 import { createStore } from 'vuex';
-import type { Horse, RaceOutcome, Round } from './types';
+import type { Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
 import { HORSE_PER_RACE, TOTAL_ROUNDS } from '@/constants';
+import type { State } from 'vue';
 
 // Bigger the value, bigger for surprises
 const LUCK_FACTOR = 20;
@@ -13,13 +14,7 @@ const REPLENISH_CONDITION_PER_ROUND = 5;
 // Everytime a horse runs this amount, it'll loose 1 condition
 const CONDITION_PER_TRACK_LENGTH = 100;
 
-export const store = createStore<{
-  horses: Horse[];
-  raceSchedule: Round[];
-  raceResults: Round[];
-  raceNo: number;
-  outcomes: RaceOutcome[];
-}>({
+export const store = createStore<State>({
   state() {
     return {
       horses: horseList,
@@ -54,7 +49,7 @@ export const store = createStore<{
 
     simulateRace(state) {
       state.raceNo++;
-      const currentRound = state.raceSchedule[state.raceNo];
+      const currentRound: Round = state.raceSchedule[state.raceNo];
       // No race left
       if (!currentRound) {
         return;

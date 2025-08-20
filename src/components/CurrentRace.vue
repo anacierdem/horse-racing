@@ -14,8 +14,6 @@ const EXTRA_TICKS = 20;
 // We need at least HORSE_PER_RACE ticks so that each horse can do its final move
 const TOTAL_TICKS = HORSE_PER_RACE + EXTRA_TICKS;
 
-// TODO: Types doesn't work for the store
-// https://vuejs.org/guide/typescript/overview.html#using-vue-with-typescript doesn't work
 export default defineComponent({
   data() {
     return {
@@ -30,7 +28,7 @@ export default defineComponent({
     currentRound(): Round {
       return this.$store.getters.currentRound;
     },
-    outcomes(): Record<number, number> {
+    outcomes() {
       const positionLookup: Record<number, number> = {};
       const outcomes: RaceOutcome[] = this.$store.state.outcomes;
       for (let i = 0; i < outcomes.length; i++) {
@@ -38,13 +36,13 @@ export default defineComponent({
       }
       return positionLookup;
     },
-    raceNo(): number {
+    raceNo() {
       return this.$store.state.raceNo;
     },
-    isFinished(): boolean {
+    isFinished() {
       return this.$store.getters.isFinished;
     },
-    haveRace(): boolean {
+    haveRace() {
       return Object.keys(this.outcomes).length > 0;
     },
   },
@@ -119,7 +117,7 @@ export default defineComponent({
       LAP {{ raceNo + 1 }}: {{ currentRound.length }}m
     </div>
     <div class="lane-wrapper">
-      <div v-for="(_, index) in this.horsePositions" class="lane">
+      <div v-for="(_, index) in horsePositions" class="lane">
         <div
           class="lane-marker"
           :style="{ borderColor: currentRound?.horses[index].color || 'white' }"
@@ -131,7 +129,7 @@ export default defineComponent({
           class="horse"
           :class="currentTick == 0 ? '' : 'animate'"
           :style="{
-            transform: `translate(-${100 - this.horsePositions[index]}%, 0) scaleX(-1)`,
+            transform: `translate(-${100 - horsePositions[index]}%, 0) scaleX(-1)`,
           }"
         >
           <!-- TODO: this glyph will look different based on the font, fix -->

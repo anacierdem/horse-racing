@@ -1,8 +1,6 @@
 <script lang="ts">
 import type { Horse } from '@/store/types';
 
-// TODO: Types doesn't work for the store
-// https://vuejs.org/guide/typescript/overview.html#using-vue-with-typescript doesn't work
 export default {
   computed: {
     horses(): Horse[] {
