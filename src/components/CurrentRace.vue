@@ -82,7 +82,6 @@ export default defineComponent({
       this.horsePositions = Array.from({ length: HORSE_PER_RACE }).fill(
         0,
       ) as number[];
-      // TODO: Fix typing properties on `this`
       this.interval = setInterval(() => {
         this.tick();
       }, INTERVAL);

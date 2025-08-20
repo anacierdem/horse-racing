@@ -67,6 +67,6 @@ shuffleInPlace(colors);
 // TODO: do not use same names more than once
 export const horseList = Array.from({ length: 20 }).map((_, i) => ({
   name: `${horses[getRandomInt(horses.length)]} ${jockeys[getRandomInt(jockeys.length)]}`,
-  condition: Math.floor(Math.random() * 100 + 1),
+  condition: getRandomInt(99) + 1,
   color: colors[i],
 }));
