@@ -21,7 +21,11 @@ export default defineComponent({
       horsePositions: Array.from({ length: HORSE_PER_RACE }).fill(
         0,
       ) as number[],
+
+      // These don't need to be reactive, but I couldn't find to properly type
+      // standalone properties on the component instance
       HORSE_PER_RACE,
+      interval: undefined as number | undefined,
     };
   },
   computed: {
