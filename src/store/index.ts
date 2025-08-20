@@ -68,7 +68,7 @@ export const store = createStore<State>({
       // Figure out positions and final conditions
       state.outcomes = currentRound.horses
         .map(({ condition }, index) => ({
-          condition: Math.max(condition - cost, 0),
+          condition: Math.max(condition - cost, 1),
           index,
         }))
         .sort(
