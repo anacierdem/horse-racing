@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 import type { Horse, RaceOutcome, Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
-import { HORSE_PER_RACE } from '@/constants';
+import { HORSE_PER_RACE, TOTAL_ROUNDS } from '@/constants';
 
 // Bigger the value, bigger for surprises
 const LUCK_FACTOR = 20;
@@ -69,6 +69,8 @@ export const store = createStore<{
           (a, b) =>
             b.condition - a.condition + getRandomInt(LUCK_FACTOR) - LUCK_FACTOR,
         );
+
+      if (state.raceNo < TOTAL_ROUNDS - 1) state.raceNo++;
     },
 
     endRace(state) {
@@ -95,7 +97,6 @@ export const store = createStore<{
       }
 
       state.raceResults.push(currentRaceResult);
-      state.raceNo++;
       state.outcomes = [];
 
       // Replenish condition
@@ -111,7 +112,7 @@ export const store = createStore<{
       if (context.state.raceSchedule.length > 0) {
         return;
       }
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < TOTAL_ROUNDS; i++) {
         // TODO: This doesn't look like it is properly typed
         context.commit('appendRound', {
           length: 1200 + 200 * i,

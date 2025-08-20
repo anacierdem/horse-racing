@@ -108,10 +108,10 @@ export default defineComponent({
 <!-- TODO: Add finish line animation for a clearer understanding -->
 <template>
   <div class="container">
-    <div v-if="!currentRound">WAITING FOR SCHEDULE</div>
-    <div v-if="currentRound">
+    <div v-if="raceNo == 0">WAITING FOR RACE</div>
+    <div v-if="raceNo > 0">
       <!-- TODO: use nth notation -->
-      LAP {{ raceNo + 1 }}:
+      LAP {{ raceNo }}:
     </div>
     <div class="lane-wrapper">
       <div v-if="!currentRound" v-for="index in HORSE_PER_RACE" class="lane">
