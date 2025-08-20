@@ -121,6 +121,8 @@ export default defineComponent({
       LAP {{ raceNo + 1 }}: {{ currentRound.length }}m
     </div>
     <div class="lane-wrapper">
+      <!-- These won't change order, so key is irrelevant -->
+      <!-- eslint-disable-next-line vue/require-v-for-key -->
       <div v-for="(_, index) in horsePositions" class="lane">
         <div
           class="lane-marker"

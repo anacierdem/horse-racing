@@ -23,6 +23,8 @@ export default {
       </tr>
     </thead>
     <tbody>
+      <!-- These won't change order, so key is irrelevant -->
+      <!-- eslint-disable-next-line vue/require-v-for-key -->
       <tr v-for="horse in horses">
         <td scope="row">{{ horse.name }}</td>
         <td>{{ horse.condition }}</td>

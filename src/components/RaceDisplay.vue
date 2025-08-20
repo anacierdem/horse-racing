@@ -24,10 +24,14 @@ export default {
     <tbody>
       <template v-for="(race, index) in races as Round[]">
         <!-- TODO: convert this to nth format -->
+        <!-- These won't change order, so key is irrelevant -->
+        <!-- eslint-disable-next-line vue/require-v-for-key -->
         <tr>
           <th colspan="2">LAP {{ index + 1 }}</th>
         </tr>
 
+        <!-- These won't change order, so key is irrelevant -->
+        <!-- eslint-disable-next-line vue/require-v-for-key -->
         <tr v-for="(horse, index) in race.horses">
           <td>{{ index + 1 }}</td>
           <td>{{ horse.name }}</td>

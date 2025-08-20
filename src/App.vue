@@ -1,7 +1,6 @@
 <script lang="ts">
 import HorseList from '@/components/HorseList.vue';
 import RaceDisplay from '@/components/RaceDisplay.vue';
-import type { Round } from './store/types';
 import CurrentRace from './components/CurrentRace.vue';
 
 export default {
