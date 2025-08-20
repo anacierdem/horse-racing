@@ -63,8 +63,6 @@ export default defineComponent({
         }
       }
 
-      console.log('this.horsePositions[index]', this.horsePositions);
-
       this.currentTick++;
       if (this.currentTick == TOTAL_TICKS + 2) {
         this.$store.commit('endRace');
@@ -138,6 +136,8 @@ export default defineComponent({
           🐎
         </div>
       </div>
+
+      <!-- TODO: Add a finish line -->
     </div>
   </div>
 </template>
