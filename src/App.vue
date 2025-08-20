@@ -44,7 +44,10 @@ export default {
     <button v-on:click="createSchedule" :disabled="isScheduled">
       Generate
     </button>
-    <button v-on:click="simulate" :disabled="isFinished || haveRace">
+    <button
+      v-on:click="simulate"
+      :disabled="isFinished || haveRace || !isScheduled"
+    >
       Start
     </button>
     <div class="main-wrapper">
