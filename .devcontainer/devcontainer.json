@@ -1,4 +1,14 @@
 {
-    "image": "node:24",
-    "containerUser": "node"
+  "image": "node:24",
+  "containerUser": "node",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "yzhang.markdown-all-in-one",
+        "esbenp.prettier-vscode",
+        "Vue.volar"
+      ]
+    }
+  }
 }
