@@ -41,6 +41,12 @@ export default defineComponent({
     raceNo(): number {
       return this.$store.state.raceNo;
     },
+    isFinished(): boolean {
+      return this.$store.getters.isFinished;
+    },
+    haveRace(): boolean {
+      return Object.keys(this.outcomes).length > 0;
+    },
   },
   methods: {
     tick() {
@@ -106,10 +112,11 @@ export default defineComponent({
 <!-- TODO: Add finish line animation for a clearer understanding -->
 <template>
   <div class="container">
-    <div v-if="Object.keys(outcomes).length == 0">WAITING FOR RACE</div>
-    <div v-if="Object.keys(outcomes).length > 0">
+    <div v-if="isFinished">GAME OVER</div>
+    <div v-if="!haveRace && !isFinished">WAITING FOR RACE</div>
+    <div v-if="haveRace && !isFinished">
       <!-- TODO: use nth notation -->
-      LAP {{ raceNo + 1 }}:
+      LAP {{ raceNo + 1 }}: {{ currentRound.length }}m
     </div>
     <div class="lane-wrapper">
       <div v-for="(_, index) in this.horsePositions" class="lane">

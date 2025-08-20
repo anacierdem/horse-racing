@@ -34,6 +34,12 @@ export const store = createStore<{
     currentRound(state) {
       return state.raceSchedule[state.raceNo];
     },
+    isFinished(state) {
+      return state.raceNo == TOTAL_ROUNDS;
+    },
+    isScheduled(state) {
+      return state.raceSchedule.length > 0;
+    },
   },
 
   mutations: {

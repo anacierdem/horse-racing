@@ -22,6 +22,12 @@ export default {
     raceResults(): Round[] {
       return this.$store.state.raceResults as Round[];
     },
+    isFinished(): boolean {
+      return this.$store.getters.isFinished;
+    },
+    isScheduled(): boolean {
+      return this.$store.getters.isScheduled;
+    },
   },
   components: {
     HorseList,
@@ -35,8 +41,10 @@ export default {
   <header></header>
 
   <main>
-    <button v-on:click="createSchedule">Generate schedule</button>
-    <button v-on:click="simulate">Start race</button>
+    <button v-on:click="createSchedule" :disabled="isScheduled">
+      Generate
+    </button>
+    <button v-on:click="simulate" :disabled="isFinished">Start</button>
     <div class="main-wrapper">
       <HorseList />
       <CurrentRace />
