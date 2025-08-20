@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import type { Horse, RaceOutcome, Round } from './types';
 import { getRandomInt, shuffleInPlace } from '@/utils';
 import { horseList } from './initialData';
+import { HORSE_PER_RACE } from '@/constants';
 
 // Bigger the value, bigger for surprises
 const LUCK_FACTOR = 20;
@@ -40,7 +41,7 @@ export const store = createStore<{
       const shuffledPool = [...state.horses];
       shuffleInPlace(shuffledPool);
       state.raceSchedule.push({
-        horses: shuffledPool.slice(0, 10),
+        horses: shuffledPool.slice(0, HORSE_PER_RACE),
         length: payload.length,
       });
     },
@@ -72,6 +73,7 @@ export const store = createStore<{
 
     endRace(state) {
       if (state.outcomes.length == 0) {
+        // TODO: assert instead of these early returns, these are error cases
         return;
       }
 
