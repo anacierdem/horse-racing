@@ -120,14 +120,19 @@ export default defineComponent({
     </div>
     <div class="lane-wrapper">
       <div v-for="(_, index) in this.horsePositions" class="lane">
-        <div class="lane-marker">
+        <div
+          class="lane-marker"
+          :style="{ borderColor: currentRound?.horses[index].color || 'white' }"
+        >
           {{ index + 1 }}
         </div>
 
         <div
           class="horse"
           :class="currentTick == 0 ? '' : 'animate'"
-          :style="`transform: translate(-${100 - this.horsePositions[index]}%, 0) scaleX(-1)`"
+          :style="{
+            transform: `translate(-${100 - this.horsePositions[index]}%, 0) scaleX(-1)`,
+          }"
         >
           <!-- TODO: this glyph will look different based on the font, fix -->
           🐎
@@ -172,7 +177,7 @@ export default defineComponent({
   }
 
   & .lane-marker {
-    border: 2px solid white;
+    border: 3px solid white;
     flex-shrink: 1;
     writing-mode: sideways-lr;
     padding: 5px;

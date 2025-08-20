@@ -25,7 +25,7 @@ export const store = createStore<{
       horses: horseList,
       raceSchedule: [],
       raceResults: [],
-      raceNo: 0,
+      raceNo: -1,
       outcomes: [],
     };
   },
@@ -35,7 +35,7 @@ export const store = createStore<{
       return state.raceSchedule[state.raceNo];
     },
     isFinished(state) {
-      return state.raceNo == TOTAL_ROUNDS;
+      return state.raceNo == TOTAL_ROUNDS - 1;
     },
     isScheduled(state) {
       return state.raceSchedule.length > 0;
@@ -53,6 +53,7 @@ export const store = createStore<{
     },
 
     simulateRace(state) {
+      state.raceNo++;
       const currentRound = state.raceSchedule[state.raceNo];
       // No race left
       if (!currentRound) {
@@ -108,8 +109,6 @@ export const store = createStore<{
         state.horses[i].condition += REPLENISH_CONDITION_PER_ROUND;
         state.horses[i].condition = Math.min(state.horses[i].condition, 100);
       }
-
-      state.raceNo++;
     },
   },
 
